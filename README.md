@@ -2,6 +2,7 @@ Mappi: Your Ultimate Social Travel App
 Mappi offers a range of features designed to enhance your social travel experience:
 
 Key Features
+
 Adding Friends: Users can search for other users and add them to their friends' list, facilitating new connections and expanding their social network.
 
 Chat: The app provides a real-time chat feature, enabling users to engage in text conversations with others. This facilitates quick message exchange and seamless conversations.
