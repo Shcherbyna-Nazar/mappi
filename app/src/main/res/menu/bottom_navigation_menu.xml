@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_search_friends"
+        android:icon="@drawable/search_icon_foreground"
+        android:title="Search users" />
+    <item
+        android:id="@+id/menu_friend_requests"
+        android:icon="@drawable/ic_person_foreground"
+        android:title="Friends requests" />
+</menu>

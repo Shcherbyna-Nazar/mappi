@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "686511410601",
+    "firebase_url": "https://mappi-388021-default-rtdb.firebaseio.com",
+    "project_id": "mappi-388021",
+    "storage_bucket": "mappi-388021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686511410601:android:6834d6772611fc41ca48b8",
+        "android_client_info": {
+          "package_name": "com.example.mappi_kt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlNv1m6wJc42HVNosu6rGUYAZsOQ5vOSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

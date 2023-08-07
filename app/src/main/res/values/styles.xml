@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="loginButton" parent="Widget.AppCompat.Button">
+        <!-- Define your style attributes here -->
+        <item name="android:background">@drawable/login_button</item>
+        <!-- Add other style attributes as needed -->
+    </style>
+
+    <style name="createAccButton" parent="Widget.AppCompat.Button">
+        <!-- Define your style attributes here -->
+        <item name="android:background">@drawable/create_acc_button</item>
+        <!-- Add other style attributes as needed -->
+    </style>
+    >
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/pretty_blue</item>
+        <item name="colorPrimaryDark">@color/pretty_green</item>
+        <item name="colorAccent">@color/pretty_black</item>
+    </style>
+
+
+</resources>

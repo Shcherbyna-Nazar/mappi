@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back_register">
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="149dp"
+        android:fontFamily="@font/kapakana"
+        android:text="Mappi"
+        android:textColor="#85B5BB"
+        android:textSize="60sp" />
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="312dp"
+        android:layout_height="130dp"
+        android:layout_below="@id/appName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="-5dp"
+        android:fontFamily="@font/carratere"
+        android:gravity="center"
+        android:text="Adventures at Your Fingertips"
+        android:textColor="#C2D6D3"
+        android:textSize="40sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="260dp"
+        android:layout_marginEnd="31dp"
+        android:background="@drawable/background_blur">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_blur"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+
+            <EditText
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Username"
+                android:textColor="#C2D6D3"
+                android:textColorHint="#85B5BB" />
+
+            <EditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Email"
+                android:textColor="#C2D6D3"
+                android:textColorHint="#85B5BB" />
+
+            <EditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="#C2D6D3"
+                android:textColorHint="#85B5BB" />
+
+            <EditText
+                android:id="@+id/password2EditText"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:hint="Repeat Password"
+                android:inputType="textPassword"
+                android:textColor="#C2D6D3"
+                android:textColorHint="#85B5BB" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/createAccButton"
+        style="@style/createAccButton"
+        android:layout_width="312dp"
+        android:layout_height="57dp"
+        android:layout_below="@id/appTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="255dp"
+
+        android:text="Create an account"
+        android:textColor="#FEFCF0"
+        app:cornerRadius="15dp" />
+
+    <TextView
+        android:id="@+id/loginTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/createAccButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Already have an account? Sign in!"
+        android:textColor="#F9FBFE"
+        android:textSize="18dp" />
+
+</RelativeLayout>

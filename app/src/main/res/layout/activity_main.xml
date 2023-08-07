@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back_main">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/createAccButton"
+        style="@style/createAccButton"
+        android:layout_width="312dp"
+        android:layout_height="57dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:text="Create an Account"
+        android:textSize="14sp"
+        android:textColor="#FEFCF0"
+        android:gravity="center"
+        app:cornerRadius="15dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loginButton"
+        style="@style/loginButton"
+        android:layout_width="312dp"
+        android:layout_height="57dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/createAccButton"
+        android:layout_marginBottom="16dp"
+        android:text="Sign In"
+        android:textSize="14sp"
+        android:textColor="#FEFCF0"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/kapakana"
+        android:text="Mappi"
+        android:textColor="#28322A"
+        android:textSize="72sp" />
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/carratere"
+        android:gravity="center"
+        android:text="Adventures at Your Fingertips"
+        android:textColor="#5A7B75"
+        android:textSize="36sp" />
+
+</RelativeLayout>

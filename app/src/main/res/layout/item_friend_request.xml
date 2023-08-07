@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <com.example.mappi_kt.ui.RoundedCornerImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/image_corners_back"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_person_foreground" />
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:text="John Doe"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/acceptButton"
+            style="@style/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept"
+            android:backgroundTint="#44D163"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/declineButton"
+            style="@style/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#E2584F"
+            android:text="Decline"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+</LinearLayout>

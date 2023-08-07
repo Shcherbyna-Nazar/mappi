@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <com.example.mappi_kt.ui.RoundedCornerImageView
+        android:id="@+id/friendIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/image_corners_back"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_person_foreground" />
+
+    <TextView
+        android:id="@+id/friendName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/deleteFriendIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerCrop"
+        android:src="@drawable/delete_foreground" />
+
+</LinearLayout>
