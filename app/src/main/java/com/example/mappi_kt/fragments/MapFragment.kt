@@ -104,84 +104,201 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback,
         mMap.clear()
         markers.clear()
 
-        var lastLocation: MyLocation? = null
+        val currentUserUid = currentUser.uid
+        val friendsRef = usersRef.child(currentUserUid).child("friends")
 
-        for (userSnapshot in snapshot.children) {
-            val uid = userSnapshot.key
+        friendsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(friendsSnapshot: DataSnapshot) {
+                var lastLocation: MyLocation? = null
 
-            for (dataSnapshot in userSnapshot.children) {
-                val postId = dataSnapshot.key!!
-                val location = dataSnapshot.child("location").getValue(MyLocation::class.java)
-                val imageUrl = dataSnapshot.child("urlImage").getValue(String::class.java)
+                for (friendSnapshot in friendsSnapshot.children) {
+                    val friendUid = friendSnapshot.getValue(String::class.java)
 
-                lastLocation = location
+                    if (friendUid != null) {
+                        for (userSnapshot in snapshot.children) {
+                            if (userSnapshot.key == friendUid) {
+                                for (dataSnapshot in userSnapshot.children) {
+                                    val postId = dataSnapshot.key!!
+                                    val location =
+                                        dataSnapshot.child("location")
+                                            .getValue(MyLocation::class.java)
+                                    val imageUrl =
+                                        dataSnapshot.child("urlImage").getValue(String::class.java)
 
-                location?.let { loc ->
-                    val latLng = LatLng(loc.latitude, loc.longitude)
-                    val markerOptions = MarkerOptions().position(latLng)
+                                    lastLocation = location
 
-                    uid?.let { userId ->
-                        val userNameRef = usersRef.child(userId).child("userName")
-                        userNameRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                            override fun onDataChange(nameSnapshot: DataSnapshot) {
-                                val userName = nameSnapshot.getValue(String::class.java)
+                                    location?.let { loc ->
+                                        val latLng = LatLng(loc.latitude, loc.longitude)
+                                        val markerOptions = MarkerOptions().position(latLng)
 
-                                imageUrl?.let { url ->
-                                    Glide.with(requireContext())
-                                        .asBitmap()
-                                        .load(url)
-                                        .placeholder(R.drawable.marker_default_foreground)
-                                        .error(R.drawable.marker_default_foreground)
-                                        .into(object : CustomTarget<Bitmap>() {
-                                            override fun onResourceReady(
-                                                resource: Bitmap,
-                                                transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
-                                            ) {
-                                                val compactBitmap = Bitmap.createScaledBitmap(
-                                                    resource,
-                                                    markerSize,
-                                                    markerSize,
-                                                    false
-                                                )
-                                                val roundedBitmap = getRoundedBitmap(compactBitmap)
-                                                val markerIcon =
-                                                    BitmapDescriptorFactory.fromBitmap(roundedBitmap)
-                                                markerOptions.icon(markerIcon)
-                                                val marker = mMap.addMarker(markerOptions)
-                                                marker?.title = userName
-                                                markers[postId] = marker
+                                        val userNameRef =
+                                            usersRef.child(friendUid).child("userName")
+                                        userNameRef.addListenerForSingleValueEvent(object :
+                                            ValueEventListener {
+                                            override fun onDataChange(nameSnapshot: DataSnapshot) {
+                                                val userName =
+                                                    nameSnapshot.getValue(String::class.java)
+
+                                                imageUrl?.let { url ->
+                                                    Glide.with(requireContext())
+                                                        .asBitmap()
+                                                        .load(url)
+                                                        .placeholder(R.drawable.marker_default_foreground)
+                                                        .error(R.drawable.marker_default_foreground)
+                                                        .into(object : CustomTarget<Bitmap>() {
+                                                            override fun onResourceReady(
+                                                                resource: Bitmap,
+                                                                transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                                                            ) {
+                                                                val compactBitmap =
+                                                                    Bitmap.createScaledBitmap(
+                                                                        resource,
+                                                                        markerSize,
+                                                                        markerSize,
+                                                                        false
+                                                                    )
+                                                                val roundedBitmap =
+                                                                    getRoundedBitmap(compactBitmap)
+                                                                val markerIcon =
+                                                                    BitmapDescriptorFactory.fromBitmap(
+                                                                        roundedBitmap
+                                                                    )
+
+                                                                val marker =
+                                                                    mMap.addMarker(markerOptions)
+                                                                marker?.title = userName
+                                                                markers[postId] = marker
+
+                                                                // Check if the marker represents your own post
+                                                                if (friendUid == currentUserUid) {
+                                                                    // Change the icon or visual style for your own markers
+                                                                    marker?.setIcon(
+                                                                        BitmapDescriptorFactory.defaultMarker(
+                                                                            BitmapDescriptorFactory.HUE_BLUE
+                                                                        )
+                                                                    )
+                                                                } else {
+                                                                    marker?.setIcon(markerIcon)
+                                                                }
+                                                            }
+
+                                                            override fun onLoadCleared(
+                                                                placeholder: Drawable?
+                                                            ) {
+                                                                // This method is intentionally empty
+                                                            }
+                                                        })
+                                                }
                                             }
 
-                                            override fun onLoadCleared(placeholder: Drawable?) {
-                                                // This method is intentionally empty
+                                            override fun onCancelled(error: DatabaseError) {
+                                                // Handle cancellation
                                             }
                                         })
+                                    }
                                 }
+                                break
                             }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                // Handle cancellation
-                            }
-                        })
+                        }
                     }
                 }
-            }
-        }
+                for (userSnapshot in snapshot.children) {
+                    if (userSnapshot.key == currentUserUid) {
+                        for (dataSnapshot in userSnapshot.children) {
+                            val postId = dataSnapshot.key!!
+                            val location =
+                                dataSnapshot.child("location").getValue(MyLocation::class.java)
+                            val imageUrl =
+                                dataSnapshot.child("urlImage").getValue(String::class.java)
 
-        val zoomLevel = 13.0f
-        val cameraUpdate =
-            if (lastLocation != null && lastLocation.latitude != -1.0 && lastLocation.longitude != -1.0) {
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(
-                        lastLocation.latitude,
-                        lastLocation.longitude
-                    ), zoomLevel
-                )
-            } else {
-                CameraUpdateFactory.newLatLngZoom(pwLatLng, zoomLevel)
+                            lastLocation = location
+
+                            location?.let { loc ->
+                                val latLng = LatLng(loc.latitude, loc.longitude)
+                                val markerOptions = MarkerOptions().position(latLng)
+
+                                val userNameRef = usersRef.child(currentUserUid).child("userName")
+                                userNameRef.addListenerForSingleValueEvent(object :
+                                    ValueEventListener {
+                                    override fun onDataChange(nameSnapshot: DataSnapshot) {
+                                        val userName = nameSnapshot.getValue(String::class.java)
+
+                                        imageUrl?.let { url ->
+                                            Glide.with(requireContext())
+                                                .asBitmap()
+                                                .load(url)
+                                                .placeholder(R.drawable.marker_default_foreground)
+                                                .error(R.drawable.marker_default_foreground)
+                                                .into(object : CustomTarget<Bitmap>() {
+                                                    override fun onResourceReady(
+                                                        resource: Bitmap,
+                                                        transition: com.bumptech.glide.request.transition.Transition<in Bitmap>?
+                                                    ) {
+                                                        val compactBitmap =
+                                                            Bitmap.createScaledBitmap(
+                                                                resource,
+                                                                markerSize,
+                                                                markerSize,
+                                                                false
+                                                            )
+                                                        val roundedBitmap =
+                                                            getRoundedBitmap(compactBitmap)
+                                                        val markerIcon =
+                                                            BitmapDescriptorFactory.fromBitmap(
+                                                                roundedBitmap
+                                                            )
+
+                                                        val marker =
+                                                            mMap.addMarker(markerOptions)
+                                                        marker?.title = userName
+                                                        markers[postId] = marker
+
+                                                        marker?.setIcon(
+                                                            markerIcon
+                                                        )
+
+                                                    }
+
+                                                    override fun onLoadCleared(
+                                                        placeholder: Drawable?
+                                                    ) {
+                                                        // This method is intentionally empty
+                                                    }
+                                                })
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        // Handle cancellation
+                                    }
+                                })
+                            }
+                        }
+                        break
+                    }
+                }
+
+                val zoomLevel = 13.0f
+                val cameraUpdate =
+                    if (lastLocation != null && lastLocation.latitude != -1.0 && lastLocation.longitude != -1.0) {
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                lastLocation.latitude,
+                                lastLocation.longitude
+                            ), zoomLevel
+                        )
+                    } else {
+                        CameraUpdateFactory.newLatLngZoom(pwLatLng, zoomLevel)
+                    }
+                mMap.moveCamera(cameraUpdate)
             }
-        mMap.moveCamera(cameraUpdate)
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle cancellation
+            }
+        })
     }
+
 
     private fun getRoundedBitmap(bitmap: Bitmap): Bitmap {
         val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)

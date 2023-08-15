@@ -1,3 +1,5 @@
+package com.example.mappi_kt.fragments
+
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -15,7 +17,6 @@ import com.example.mappi_kt.R
 import com.example.mappi_kt.adapters.FriendAdapter
 import com.example.mappi_kt.entity.FriendRequest
 import com.example.mappi_kt.entity.User
-import com.example.mappi_kt.fragments.FriendRequestsFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 

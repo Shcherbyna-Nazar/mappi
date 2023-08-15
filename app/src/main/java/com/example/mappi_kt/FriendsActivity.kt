@@ -1,6 +1,7 @@
 package com.example.mappi_kt
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,11 +20,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.mappi_kt.entity.User
 import com.example.mappi_kt.ui.RoundedCornerImageView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 class FriendsActivity : AppCompatActivity() {
 
@@ -254,6 +251,18 @@ class FriendsActivity : AppCompatActivity() {
             val friendIcon: RoundedCornerImageView = itemView.findViewById(R.id.friendIcon)
             val friendName: TextView = itemView.findViewById(R.id.friendName)
             val deleteFriendIcon: ImageView = itemView.findViewById(R.id.deleteFriendIcon)
+
+            init {
+                friendIcon.setOnClickListener {
+                    val friend = friendsList[adapterPosition]
+                    val intent = Intent(applicationContext, HomeActivity::class.java)
+                    intent.putExtra("userId", friend.userId)
+                    intent.putExtra("openProfileFragment", true)
+                    startActivity(intent)
+                    finish()
+
+                }
+            }
         }
     }
 
@@ -262,4 +271,5 @@ class FriendsActivity : AppCompatActivity() {
 
         fun onFriendsListError(errorMessage: String)
     }
+
 }

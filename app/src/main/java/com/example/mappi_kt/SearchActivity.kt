@@ -1,6 +1,6 @@
 package com.example.mappi_kt
 
-import SearchFriendsFragment
+import com.example.mappi_kt.fragments.SearchFriendsFragment
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem

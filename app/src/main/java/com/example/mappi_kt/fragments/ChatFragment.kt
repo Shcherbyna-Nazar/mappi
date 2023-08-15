@@ -1,3 +1,5 @@
+package com.example.mappi_kt.fragments
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -48,6 +50,9 @@ class ChatFragment : Fragment(), ChatAdapter.OnChatItemClickListener {
         retrieveChatItems()
     }
 
+    // Inside your retrieveChatItems function
+    // Inside your retrieveChatItems function
+    // Inside your retrieveChatItems function
     private fun retrieveChatItems() {
         chatItemList.clear()
 
@@ -81,15 +86,18 @@ class ChatFragment : Fragment(), ChatAdapter.OnChatItemClickListener {
                                 if (chatItem != null) {
                                     chatItem.userUid = friendUid
                                 }
-                                if (chatItem != null) {
-                                    chatItemList.add(chatItem)
+
+                                // Use addChildEventListener for real-time updates
+                                getLastMessageAndTimestamp(currentUserUid, friendUid) { lastMessage, lastTimestamp ->
+                                    chatItem?.lastMessage = lastMessage
+                                    chatItem?.lastTimestamp = lastTimestamp
+                                    chatAdapter.notifyDataSetChanged()
                                 }
 
-                                val lastMessage = getLastMessage(friendUid)
-                                val lastTimestamp = getLastTimestamp(friendUid)
-                                updateChatItemLastMessageAndTimestamp(friendUid, lastMessage, lastTimestamp)
-
-                                chatAdapter.notifyDataSetChanged()
+                                if (chatItem != null) {
+                                    chatItemList.add(chatItem)
+                                    chatAdapter.notifyDataSetChanged()
+                                }
                             }
                         }
 
@@ -106,129 +114,69 @@ class ChatFragment : Fragment(), ChatAdapter.OnChatItemClickListener {
         })
     }
 
-    private fun getLastMessage(friendUid: String): String {
-        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+    private fun getLastMessageAndTimestamp(currentUserUid: String, friendUid: String, onComplete: (String, String) -> Unit) {
         val chatRef = FirebaseDatabase.getInstance().getReference("chat")
-        val currentUserFriendRef = chatRef.child(currentUserUid!!).child(friendUid)
+        val currentUserFriendRef = chatRef.child(currentUserUid).child(friendUid)
         val friendUserFriendRef = chatRef.child(friendUid).child(currentUserUid)
 
         val lastMessageRef = currentUserFriendRef.child("messages").orderByChild("timestamp").limitToLast(1)
+        lastMessageRef.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val message = snapshot.getValue(Message::class.java)
+                if (message != null) {
+                    val lastMessage = message.message.toString()
+                    val lastTimestamp = message.timestamp.toString()
+                    onComplete(lastMessage, lastTimestamp)
+                }
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                // Handle change in child if needed
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                // Handle removed child if needed
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                // Handle moved child if needed
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle error
+            }
+        })
+
         val friendLastMessageRef = friendUserFriendRef.child("messages").orderByChild("timestamp").limitToLast(1)
-
-        var lastMessage = ""
-
-        lastMessageRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (messageSnapshot in snapshot.children) {
-                    val message = messageSnapshot.getValue(Message::class.java)
-                    if (message != null) {
-                        lastMessage = message.message.toString()
-                    }
+        friendLastMessageRef.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val message = snapshot.getValue(Message::class.java)
+                if (message != null) {
+                    val lastMessage = message.message.toString()
+                    val lastTimestamp = message.timestamp.toString()
+                    onComplete(lastMessage, lastTimestamp)
                 }
-                // Update the chat item list with the last message
-                updateChatItemLastMessage(friendUid, lastMessage)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                // Handle change in child if needed
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                // Handle removed child if needed
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                // Handle moved child if needed
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Handle error
             }
         })
-
-        friendLastMessageRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (messageSnapshot in snapshot.children) {
-                    val message = messageSnapshot.getValue(Message::class.java)
-                    if (message != null) {
-                        lastMessage = message.message.toString()
-                    }
-                }
-                // Update the chat item list with the last message
-                updateChatItemLastMessage(friendUid, lastMessage)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
-
-        return lastMessage
     }
 
-    private fun getLastTimestamp(friendUid: String): String {
-        val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
-        val chatRef = FirebaseDatabase.getInstance().getReference("chat")
-        val currentUserFriendRef = chatRef.child(currentUserUid!!).child(friendUid)
-        val friendUserFriendRef = chatRef.child(friendUid).child(currentUserUid)
 
-        val lastTimestampRef = currentUserFriendRef.child("messages").orderByChild("timestamp").limitToLast(1)
-        val friendLastTimestampRef = friendUserFriendRef.child("messages").orderByChild("timestamp").limitToLast(1)
-
-        var lastTimestamp = ""
-
-        lastTimestampRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (messageSnapshot in snapshot.children) {
-                    val message = messageSnapshot.getValue(Message::class.java)
-                    if (message != null) {
-                        lastTimestamp = message.timestamp.toString()
-                    }
-                }
-                // Update the chat item list with the last timestamp
-                updateChatItemLastTimestamp(friendUid, lastTimestamp)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
-
-        friendLastTimestampRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (messageSnapshot in snapshot.children) {
-                    val message = messageSnapshot.getValue(Message::class.java)
-                    if (message != null) {
-                        lastTimestamp = message.timestamp.toString()
-                    }
-                }
-                // Update the chat item list with the last timestamp
-                updateChatItemLastTimestamp(friendUid, lastTimestamp)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
-
-        return lastTimestamp
-    }
-
-    private fun updateChatItemLastMessage(friendUid: String, lastMessage: String) {
-        for (chatItem in chatItemList) {
-            if (chatItem.userUid == friendUid) {
-                chatItem.lastMessage = lastMessage
-                break
-            }
-        }
-    }
-
-    private fun updateChatItemLastTimestamp(friendUid: String, lastTimestamp: String) {
-        for (chatItem in chatItemList) {
-            if (chatItem.userUid == friendUid) {
-                chatItem.lastTimestamp = lastTimestamp
-                break
-            }
-        }
-    }
-
-    private fun updateChatItemLastMessageAndTimestamp(friendUid: String, lastMessage: String, lastTimestamp: String) {
-        for (chatItem in chatItemList) {
-            if (chatItem.userUid == friendUid) {
-                chatItem.lastMessage = lastMessage
-                chatItem.lastTimestamp = lastTimestamp
-                break
-            }
-        }
-    }
 
 
     override fun onDestroyView() {

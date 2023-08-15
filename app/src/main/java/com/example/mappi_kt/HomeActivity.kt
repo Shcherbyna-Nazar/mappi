@@ -1,6 +1,6 @@
 package com.example.mappi_kt
 
-import ExampleFragment
+import com.example.mappi_kt.fragments.ChatFragment
 import com.example.mappi_kt.fragments.ProfileFragment
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.example.mappi_kt.fragments.ChatFragment
 import com.example.mappi_kt.fragments.MapFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
